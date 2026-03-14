@@ -9,6 +9,10 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
+use device_key_service::{
+    AddDeviceRequest, DeviceKeyError, DeviceKeyService, RecoveryEnrollmentRequest,
+    RemoveDeviceRequest,
+};
 use directory_service::DirectoryService;
 use persistence::InMemoryStore;
 use serde::{Deserialize, Serialize};
@@ -18,6 +22,7 @@ use serde_json::json;
 pub struct AppState {
     pub accounts: AccountService,
     pub directory: DirectoryService,
+    pub device_keys: DeviceKeyService,
 }
 
 impl AppState {
@@ -25,6 +30,7 @@ impl AppState {
         Self {
             accounts: AccountService::new(store.clone()),
             directory: DirectoryService::new(store),
+            device_keys: DeviceKeyService::new(),
         }
     }
 }
@@ -47,6 +53,13 @@ pub fn build_router_with_state(state: AppState) -> Router {
             get(display_name_search),
         )
         .route("/v1/directory/phone/lookup", get(phone_lookup))
+        .route("/v1/devices/add-device", post(add_device))
+        .route("/v1/devices/remove-device", post(remove_device))
+        .route("/v1/devices/list-devices", get(list_devices))
+        .route(
+            "/v1/devices/recovery-enrollment",
+            post(recovery_enrollment),
+        )
         .with_state(state)
 }
 
@@ -150,6 +163,48 @@ async fn phone_lookup(
     }
 }
 
+async fn add_device(
+    State(state): State<AppState>,
+    Json(payload): Json<AddDeviceRequest>,
+) -> Result<(StatusCode, Json<device_trust::DeviceRecord>), DeviceApiError> {
+    let device = state.device_keys.add_device(payload).await?;
+    Ok((StatusCode::CREATED, Json(device)))
+}
+
+async fn remove_device(
+    State(state): State<AppState>,
+    Json(payload): Json<RemoveDeviceRequest>,
+) -> Result<Json<serde_json::Value>, DeviceApiError> {
+    state.device_keys.remove_device(payload).await?;
+    Ok(Json(json!({ "status": "ok" })))
+}
+
+#[derive(Debug, Deserialize)]
+struct DeviceListQuery {
+    account_id: String,
+}
+
+#[derive(Debug, Serialize)]
+struct DeviceListResponse {
+    devices: Vec<device_trust::DeviceRecord>,
+}
+
+async fn list_devices(
+    State(state): State<AppState>,
+    Query(query): Query<DeviceListQuery>,
+) -> Result<Json<DeviceListResponse>, DeviceApiError> {
+    let devices = state.device_keys.list_devices(&query.account_id).await?;
+    Ok(Json(DeviceListResponse { devices }))
+}
+
+async fn recovery_enrollment(
+    State(state): State<AppState>,
+    Json(payload): Json<RecoveryEnrollmentRequest>,
+) -> Result<Json<device_key_service::RecoveryEnrollmentResult>, DeviceApiError> {
+    let result = state.device_keys.recover_without_trusted_device(payload).await?;
+    Ok(Json(result))
+}
+
 #[derive(Debug)]
 struct ApiError(AccountError);
 
@@ -176,5 +231,28 @@ impl IntoResponse for ApiError {
             })),
         )
             .into_response()
+    }
+}
+
+#[derive(Debug)]
+struct DeviceApiError(DeviceKeyError);
+
+impl From<DeviceKeyError> for DeviceApiError {
+    fn from(value: DeviceKeyError) -> Self {
+        Self(value)
+    }
+}
+
+impl IntoResponse for DeviceApiError {
+    fn into_response(self) -> Response {
+        let (status, error_code) = match self.0 {
+            DeviceKeyError::ApprovalRequired => (StatusCode::CONFLICT, "approval_required"),
+            DeviceKeyError::DeviceNotFound => (StatusCode::NOT_FOUND, "device_not_found"),
+            DeviceKeyError::RecoveryUnavailable => {
+                (StatusCode::BAD_REQUEST, "recovery_unavailable")
+            }
+        };
+
+        (status, Json(json!({ "error_code": error_code }))).into_response()
     }
 }

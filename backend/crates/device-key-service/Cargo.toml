@@ -1,0 +1,12 @@
+[package]
+name = "device-key-service"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+device-trust = { path = "../../../core/rust-core/crates/device-trust" }
+serde.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true

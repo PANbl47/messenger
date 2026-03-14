@@ -13,6 +13,8 @@ path = "src/main.rs"
 
 [dependencies]
 account-service = { path = "../crates/account-service" }
+device-key-service = { path = "../crates/device-key-service" }
+device-trust = { path = "../../core/rust-core/crates/device-trust" }
 directory-service = { path = "../crates/directory-service" }
 axum.workspace = true
 http-body-util.workspace = true
