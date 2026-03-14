@@ -211,6 +211,7 @@ git commit -m "feat: define messenger shared domain contracts"
 - Modify: `backend/gateway/src/router.rs`
 - Test: `backend/crates/account-service/tests/account_registration.rs`
 - Test: `backend/crates/directory-service/tests/search_visibility.rs`
+- Test: `backend/gateway/tests/account_and_search_routes.rs`
 
 - [ ] **Step 1: Write the failing account and search tests**
 
@@ -222,7 +223,22 @@ async fn phone_first_registration_requires_verified_phone_username_and_display_n
 async fn login_first_registration_requires_unique_login_password_username_and_display_name() {}
 
 #[tokio::test]
+async fn phone_first_account_can_link_login_and_password_later() {}
+
+#[tokio::test]
+async fn login_first_account_can_link_phone_later() {}
+
+#[tokio::test]
+async fn username_search_returns_exact_unique_match() {}
+
+#[tokio::test]
+async fn display_name_search_returns_ranked_disambiguated_results() {}
+
+#[tokio::test]
 async fn phone_search_respects_target_privacy_setting() {}
+
+#[tokio::test]
+async fn link_email_persists_recovery_metadata_without_exposing_private_content() {}
 ```
 
 - [ ] **Step 2: Run the targeted backend tests**
@@ -239,18 +255,36 @@ Create tables and repositories for:
 - display-name search projection
 - phone discoverability settings
 
-Expose minimal gateway routes for sign-up, sign-in bootstrap, link-email, and user search.
+Expose minimal gateway routes for:
+- sign-up
+- sign-in bootstrap
+- link-email
+- link-phone-to-login-first-account
+- link-login-password-to-phone-first-account
+- username and display-name search
+- phone search subject to privacy rules
 
 - [ ] **Step 4: Add integration coverage for uniqueness constraints**
 
 Verify that duplicate `login`, `username`, and attached `phone` values are rejected deterministically with stable error codes that clients can map cleanly.
 
-- [ ] **Step 5: Re-run the backend identity suite**
+- [ ] **Step 5: Add gateway route integration tests**
 
-Run: `cargo test -p account-service -p directory-service`
+Verify the HTTP contract for:
+- phone-first sign-up
+- login-first sign-up
+- link-email
+- linking phone or login later
+- username search
+- ranked display-name search
+- phone search with privacy control
+
+- [ ] **Step 6: Re-run the backend identity suite**
+
+Run: `cargo test -p account-service -p directory-service -p gateway --test account_and_search_routes`
 Expected: PASS with registration, linking, and privacy search tests green.
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add backend/crates/account-service backend/crates/directory-service backend/crates/persistence backend/migrations/0001_initial.sql backend/gateway/src/router.rs
@@ -267,6 +301,7 @@ git commit -m "feat: add account identity and directory services"
 - Test: `backend/crates/device-key-service/tests/device_enrollment.rs`
 - Test: `backend/crates/device-key-service/tests/password_reset_recovery.rs`
 - Test: `core/rust-core/crates/device-trust/tests/wrapped_history_access.rs`
+- Test: `backend/gateway/tests/device_routes.rs`
 
 - [ ] **Step 1: Write failing tests for trusted-device enrollment**
 
@@ -275,10 +310,16 @@ git commit -m "feat: add account identity and directory services"
 async fn second_device_requires_existing_trusted_device_approval_when_available() {}
 
 #[tokio::test]
+async fn no_trusted_device_recovery_restores_account_access_but_not_guaranteed_history_access() {}
+
+#[tokio::test]
 async fn password_reset_invalidates_password_derived_recovery_wraps() {}
 
 #[test]
 fn history_access_requires_authorized_device_plus_wrapped_account_material() {}
+
+#[tokio::test]
+async fn list_devices_returns_metadata_trust_state_and_last_active_time() {}
 ```
 
 - [ ] **Step 2: Run the device-trust suite**
@@ -294,17 +335,26 @@ Create data structures and storage for:
 - enrollment approvals
 - wrapped account key material references
 - password-derived recovery material status
+- last-active timestamps for each device
 
-- [ ] **Step 4: Wire gateway routes for add-device, remove-device, and list-devices**
+- [ ] **Step 4: Wire gateway routes for add-device, remove-device, list-devices, and recovery-enrollment**
 
 Return only metadata and trust state. Do not expose decrypted content or raw key material in API responses.
 
-- [ ] **Step 5: Re-run the device-trust suite**
+- [ ] **Step 5: Add gateway route integration tests**
 
-Run: `cargo test -p device-key-service -p device-trust`
-Expected: PASS with device approval, revocation, and reset tests green.
+Verify:
+- add-device approval flow
+- remove-device flow
+- list-devices includes last activity
+- no-trusted-device recovery enrollment path
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 6: Re-run the device-trust suite**
+
+Run: `cargo test -p device-key-service -p device-trust -p gateway --test device_routes`
+Expected: PASS with device approval, revocation, recovery, and reset tests green.
+
+- [ ] **Step 7: Commit**
 
 ```bash
 git add backend/crates/device-key-service backend/gateway/src/router.rs core/rust-core/crates/device-trust
