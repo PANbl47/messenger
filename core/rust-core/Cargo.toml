@@ -6,3 +6,9 @@ edition.workspace = true
 [lib]
 name = "rust_core"
 path = "src/lib.rs"
+
+[dependencies]
+device-trust = { path = "crates/device-trust" }
+domain-model = { path = "crates/domain-model" }
+identity-contracts = { path = "crates/identity-contracts" }
+message-protocol = { path = "crates/message-protocol" }
