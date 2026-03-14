@@ -1,0 +1,12 @@
+[package]
+name = "account-service"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+identity-contracts = { path = "../../../core/rust-core/crates/identity-contracts" }
+persistence = { path = "../persistence" }
+serde.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true

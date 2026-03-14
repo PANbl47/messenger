@@ -1,5 +1,8 @@
 [workspace]
 members = [
+    "backend/crates/account-service",
+    "backend/crates/directory-service",
+    "backend/crates/persistence",
     "backend/gateway",
     "core/rust-core",
     "core/rust-core/crates/device-trust",
@@ -18,3 +21,4 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.44", features = ["macros", "rt-multi-thread", "net"] }
 tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"

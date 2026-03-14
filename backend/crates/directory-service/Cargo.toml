@@ -1,0 +1,12 @@
+[package]
+name = "directory-service"
+version = "0.1.0"
+edition.workspace = true
+
+[dependencies]
+account-service = { path = "../account-service" }
+persistence = { path = "../persistence" }
+serde.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true

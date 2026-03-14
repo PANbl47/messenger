@@ -12,6 +12,15 @@ name = "gateway"
 path = "src/main.rs"
 
 [dependencies]
+account-service = { path = "../crates/account-service" }
+directory-service = { path = "../crates/directory-service" }
 axum.workspace = true
+http-body-util.workspace = true
+persistence = { path = "../crates/persistence" }
+serde.workspace = true
+serde_json.workspace = true
 tokio.workspace = true
 tower.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

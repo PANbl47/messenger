@@ -3,6 +3,16 @@
 version = 4
 
 [[package]]
+name = "account-service"
+version = "0.1.0"
+dependencies = [
+ "identity-contracts",
+ "persistence",
+ "serde",
+ "tokio",
+]
+
+[[package]]
 name = "atomic-waker"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -75,6 +85,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "directory-service"
+version = "0.1.0"
+dependencies = [
+ "account-service",
+ "persistence",
+ "serde",
+ "tokio",
+]
+
+[[package]]
 name = "domain-model"
 version = "0.1.0"
 dependencies = [
@@ -129,7 +149,13 @@ dependencies = [
 name = "gateway"
 version = "0.1.0"
 dependencies = [
+ "account-service",
  "axum",
+ "directory-service",
+ "http-body-util",
+ "persistence",
+ "serde",
+ "serde_json",
  "tokio",
  "tower",
 ]
@@ -289,6 +315,13 @@ name = "percent-encoding"
 version = "2.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9b4f627cb1b25917193a259e49bdad08f671f8d9708acfd5fe0a8c1455d87220"
+
+[[package]]
+name = "persistence"
+version = "0.1.0"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "pin-project-lite"
