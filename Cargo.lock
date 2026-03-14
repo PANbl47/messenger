@@ -299,6 +299,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "messaging-service"
+version = "0.1.0"
+dependencies = [
+ "sync-engine",
+ "tokio",
+]
+
+[[package]]
 name = "mime"
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -372,6 +380,7 @@ dependencies = [
  "domain-model",
  "identity-contracts",
  "message-protocol",
+ "sync-engine",
 ]
 
 [[package]]
@@ -478,6 +487,10 @@ dependencies = [
  "quote",
  "unicode-ident",
 ]
+
+[[package]]
+name = "sync-engine"
+version = "0.1.0"
 
 [[package]]
 name = "sync_wrapper"

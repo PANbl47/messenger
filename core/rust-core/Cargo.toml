@@ -12,3 +12,4 @@ device-trust = { path = "crates/device-trust" }
 domain-model = { path = "crates/domain-model" }
 identity-contracts = { path = "crates/identity-contracts" }
 message-protocol = { path = "crates/message-protocol" }
+sync-engine = { path = "crates/sync-engine" }

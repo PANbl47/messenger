@@ -3,6 +3,7 @@ members = [
     "backend/crates/account-service",
     "backend/crates/device-key-service",
     "backend/crates/directory-service",
+    "backend/crates/messaging-service",
     "backend/crates/persistence",
     "backend/gateway",
     "core/rust-core",
@@ -10,6 +11,7 @@ members = [
     "core/rust-core/crates/domain-model",
     "core/rust-core/crates/identity-contracts",
     "core/rust-core/crates/message-protocol",
+    "core/rust-core/crates/sync-engine",
 ]
 resolver = "2"
 
@@ -20,6 +22,6 @@ edition = "2021"
 axum = "0.8"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "1.44", features = ["macros", "rt-multi-thread", "net"] }
+tokio = { version = "1.44", features = ["macros", "rt-multi-thread", "net", "sync"] }
 tower = { version = "0.5", features = ["util"] }
 http-body-util = "0.1"
