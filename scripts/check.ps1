@@ -17,17 +17,12 @@ function Invoke-NodeTestIfPresent {
             return
         }
 
-        if (Test-Path "pnpm-lock.yaml") {
-            pnpm test
-            return
-        }
-
-        if (Test-Path "yarn.lock") {
-            yarn test
-            return
-        }
-
         npm test
+
+        if (Test-Path "playwright.config.ts") {
+            npm run build
+            npm run e2e
+        }
     }
     finally {
         Pop-Location
@@ -53,12 +48,12 @@ function Invoke-GradleTestIfPresent {
         }
 
         if ($IsWindows -and (Test-Path "gradlew.bat")) {
-            & ".\gradlew.bat" test
+            & ".\gradlew.bat" testDebugUnitTest
             return
         }
 
         if (Test-Path "gradlew") {
-            & "./gradlew" test
+            & "./gradlew" testDebugUnitTest
             return
         }
 
@@ -72,9 +67,19 @@ function Invoke-GradleTestIfPresent {
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Resolve-Path (Join-Path $scriptDir "..")
 
+if (-not $env:JAVA_HOME) {
+    $temurin = Get-ChildItem "C:\Program Files\Eclipse Adoptium" -Directory -ErrorAction SilentlyContinue |
+        Sort-Object Name -Descending |
+        Select-Object -First 1
+    if ($temurin) {
+        $env:JAVA_HOME = $temurin.FullName
+    }
+}
+
 Push-Location $repoRoot
 try {
-    cargo test --workspace
+    cargo test --workspace --exclude desktop-shell
+    cargo check --workspace --exclude desktop-shell
 
     Invoke-NodeTestIfPresent -RelativePath "apps/web"
     Invoke-GradleTestIfPresent -RelativePath "apps/android"

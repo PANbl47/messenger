@@ -105,6 +105,11 @@ textarea:focus-visible {
   color: #a5b6ab;
 }
 
+.status-copy {
+  color: #cfe0d4;
+  margin-top: 0.35rem;
+}
+
 h1,
 h2,
 h3,

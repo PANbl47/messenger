@@ -47,6 +47,7 @@ function MessengerLayout() {
           <div>
             <p className="eyebrow">Current conversation</p>
             <h2>{activeConversation?.title ?? 'No chat selected'}</h2>
+            <p className="status-copy">{state.cleanupFeedback}</p>
           </div>
           <div className="network-cluster">
             <label className="toggle">
