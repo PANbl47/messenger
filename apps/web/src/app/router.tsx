@@ -1,5 +1,6 @@
 import { startTransition } from 'react'
 import { NavLink, Route, Routes, useNavigate } from 'react-router-dom'
+import { AuthGateway } from '../features/auth/AuthGateway'
 import { AuthShell } from '../features/auth/AuthShell'
 import { ChatListScreen } from '../features/chat/ChatListScreen'
 import { Composer } from '../features/chat/Composer'
@@ -11,6 +12,9 @@ import { chatActions, useChatStoreSnapshot } from '../lib/state/chatStore'
 function MessengerLayout() {
   const state = useChatStoreSnapshot()
   const navigate = useNavigate()
+  if (!state.account) {
+    return <AuthGateway />
+  }
   const activeConversation = state.conversations.find(
     (conversation) => conversation.id === state.selectedConversationId,
   )
@@ -25,7 +29,7 @@ function MessengerLayout() {
         <div className="brand-block">
           <span className="brand-mark">SE</span>
           <div>
-            <p className="eyebrow">Messenger Alpha</p>
+            <p className="eyebrow">Private messenger</p>
             <h1>Serenity</h1>
           </div>
         </div>

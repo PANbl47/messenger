@@ -2,6 +2,9 @@ import { useChatStoreSnapshot } from '../../lib/state/chatStore'
 
 export function AuthShell() {
   const state = useChatStoreSnapshot()
+  if (!state.account) {
+    return null
+  }
 
   return (
     <section className="panel">

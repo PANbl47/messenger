@@ -6,6 +6,13 @@ export function ChatListScreen() {
   return (
     <section className="panel">
       <p className="eyebrow">Chats</p>
+      <h3>Recent conversations</h3>
+      {state.conversations.length === 0 ? (
+        <div className="empty-block">
+          <p>No conversations yet.</p>
+          <small>Your account is ready. The first real chat starts here.</small>
+        </div>
+      ) : null}
       <ul className="chat-list">
         {state.conversations.map((conversation) => (
           <li key={conversation.id}>

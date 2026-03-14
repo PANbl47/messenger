@@ -22,6 +22,15 @@ body {
   min-height: 100vh;
 }
 
+input,
+textarea {
+  border-radius: 18px;
+  border: 1px solid rgba(197, 215, 203, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  padding: 0.95rem 1rem;
+}
+
 button,
 input,
 textarea {
@@ -47,6 +56,35 @@ textarea:focus-visible {
 
 #root {
   min-height: 100vh;
+}
+
+.auth-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.auth-card {
+  width: min(560px, 100%);
+  border-radius: 32px;
+  border: 1px solid rgba(197, 215, 203, 0.12);
+  background: rgba(15, 23, 19, 0.88);
+  padding: 2rem;
+  display: grid;
+  gap: 1rem;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.22);
+}
+
+.auth-mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.auth-mode.active {
+  background: rgba(152, 213, 175, 0.18);
+  border-color: rgba(152, 213, 175, 0.34);
 }
 
 .app-shell {
@@ -123,6 +161,13 @@ p {
   border-radius: 28px;
   padding: 1.25rem;
   box-shadow: 0 24px 50px rgba(0, 0, 0, 0.18);
+}
+
+.empty-block {
+  display: grid;
+  align-content: center;
+  gap: 0.4rem;
+  min-height: 180px;
 }
 
 .identity-grid,

@@ -42,7 +42,7 @@ type ChatState = {
     username: string
     phone: string | null
     login: string | null
-  }
+  } | null
   conversations: Conversation[]
   selectedConversationId: string
   messagesByConversation: Record<string, MessageRecord[]>
@@ -64,33 +64,18 @@ const defaultDraft = (): DraftRecord => ({
   voiceDraftLabel: null,
 })
 
+const defaultConversation = (): Conversation => ({
+  id: 'saved-messages',
+  title: 'Saved messages',
+  subtitle: 'Private space for notes and test sends',
+})
+
 const defaultState = (): ChatState => ({
-  account: {
-    displayName: 'Ser Makarov',
-    username: 'ser',
-    phone: '+7 999 000 11 22',
-    login: 'ser-login',
-  },
-  conversations: [
-    { id: 'chat-alex', title: 'Alex', subtitle: 'Weak network test buddy' },
-  ],
-  selectedConversationId: 'chat-alex',
-  messagesByConversation: {
-    'chat-alex': [
-      {
-        id: 'seed-1',
-        author: 'Alex',
-        body: 'Queue should feel calm even when the signal is not.',
-        status: 'read',
-        attachmentName: null,
-        voiceDraftLabel: null,
-        queuedSeconds: 0,
-      },
-    ],
-  },
-  draftsByConversation: {
-    'chat-alex': defaultDraft(),
-  },
+  account: null,
+  conversations: [],
+  selectedConversationId: '',
+  messagesByConversation: {},
+  draftsByConversation: {},
   networkAvailable: true,
   privacy: {
     phoneLookupEnabled: true,
@@ -112,6 +97,7 @@ async function hydrateDrafts() {
   const persisted = await loadPersistedState()
   state = {
     ...state,
+    account: persisted.account,
     draftsByConversation: {
       ...state.draftsByConversation,
       ...persisted.draftsByConversation,
@@ -129,6 +115,7 @@ function emit() {
 
 function persistDrafts() {
   void savePersistedState({
+    account: state.account,
     draftsByConversation: state.draftsByConversation,
   })
 }
@@ -144,6 +131,49 @@ function getConversationMessages(conversationId: string) {
 }
 
 export const chatActions = {
+  completePhoneSignup(input: {
+    displayName: string
+    username: string
+    phone: string
+  }) {
+    setState({
+      ...state,
+      account: {
+        displayName: input.displayName.trim(),
+        username: input.username.trim(),
+        phone: input.phone.trim(),
+        login: null,
+      },
+      conversations: [defaultConversation()],
+      selectedConversationId: 'saved-messages',
+      draftsByConversation: {
+        'saved-messages': defaultDraft(),
+      },
+      cleanupFeedback: 'Account created. Start your first private chat.',
+    })
+  },
+  completeLoginSignup(input: {
+    displayName: string
+    username: string
+    login: string
+  }) {
+    setState({
+      ...state,
+      account: {
+        displayName: input.displayName.trim(),
+        username: input.username.trim(),
+        phone: null,
+        login: input.login.trim(),
+      },
+      conversations: [defaultConversation()],
+      selectedConversationId: 'saved-messages',
+      draftsByConversation: {
+        'saved-messages': defaultDraft(),
+      },
+      cleanupFeedback:
+        'Account created. Link a phone later if you want discoverability.',
+    })
+  },
   selectConversation(conversationId: string) {
     setState({ ...state, selectedConversationId: conversationId })
   },
@@ -160,6 +190,9 @@ export const chatActions = {
     })
   },
   sendDraft(conversationId: string) {
+    if (!conversationId) {
+      return
+    }
     const draft = state.draftsByConversation[conversationId] ?? defaultDraft()
     if (!draft.text && !draft.attachmentName && !draft.voiceDraftLabel) {
       return
@@ -299,7 +332,35 @@ export const chatActions = {
   },
   async resetForTests() {
     await clearPersistedState()
-    state = defaultState()
+    state = {
+      ...defaultState(),
+      account: {
+        displayName: 'Ser Makarov',
+        username: 'ser',
+        phone: '+7 999 000 11 22',
+        login: 'ser-login',
+      },
+      conversations: [
+        { id: 'chat-alex', title: 'Alex', subtitle: 'Weak network test buddy' },
+      ],
+      selectedConversationId: 'chat-alex',
+      messagesByConversation: {
+        'chat-alex': [
+          {
+            id: 'seed-1',
+            author: 'Alex',
+            body: 'Queue should feel calm even when the signal is not.',
+            status: 'read',
+            attachmentName: null,
+            voiceDraftLabel: null,
+            queuedSeconds: 0,
+          },
+        ],
+      },
+      draftsByConversation: {
+        'chat-alex': defaultDraft(),
+      },
+    }
     emit()
   },
 }

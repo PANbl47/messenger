@@ -14,16 +14,32 @@ const statusGlyph: Record<MessageStatus, string> = {
 
 export function ConversationScreen() {
   const state = useChatStoreSnapshot()
+  const activeConversation = state.conversations.find(
+    (conversation) => conversation.id === state.selectedConversationId,
+  )
   const activeMessages = useDeferredValue(
     state.messagesByConversation[state.selectedConversationId] ?? [],
   )
+
+  if (!activeConversation) {
+    return (
+      <section className="panel conversation-panel empty-block">
+        <p className="eyebrow">Conversation</p>
+        <h3>No chat selected</h3>
+        <p className="status-copy">
+          Real onboarding is now in place. Next step is creating or finding a
+          real contact.
+        </p>
+      </section>
+    )
+  }
 
   return (
     <section className="panel conversation-panel">
       <div className="panel-header">
         <div>
           <p className="eyebrow">Timeline</p>
-          <h3>Conversation</h3>
+          <h3>{activeConversation.title}</h3>
         </div>
         <button type="button" onClick={() => chatActions.setTyping(true)}>
           Emit typing

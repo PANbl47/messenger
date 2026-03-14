@@ -3,6 +3,19 @@ import { chatActions, useChatStoreSnapshot } from '../../lib/state/chatStore'
 export function Composer() {
   const state = useChatStoreSnapshot()
   const draft = state.draftsByConversation[state.selectedConversationId]
+  const hasConversation = Boolean(state.selectedConversationId)
+
+  if (!hasConversation) {
+    return (
+      <section className="panel composer-panel empty-block">
+        <p className="eyebrow">Composer</p>
+        <h3>Waiting for your first chat</h3>
+        <p className="status-copy">
+          The composer unlocks once a real conversation exists.
+        </p>
+      </section>
+    )
+  }
 
   return (
     <section className="panel composer-panel">

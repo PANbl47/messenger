@@ -4,7 +4,15 @@ type PersistedDraft = {
   voiceDraftLabel: string | null
 }
 
+type PersistedAccount = {
+  displayName: string
+  username: string
+  phone: string | null
+  login: string | null
+}
+
 type PersistedState = {
+  account: PersistedAccount | null
   draftsByConversation: Record<string, PersistedDraft>
 }
 
@@ -31,13 +39,13 @@ function writeRaw(value: string) {
 export async function loadPersistedState(): Promise<PersistedState> {
   const raw = readRaw()
   if (!raw) {
-    return { draftsByConversation: {} }
+    return { account: null, draftsByConversation: {} }
   }
 
   try {
     return JSON.parse(raw) as PersistedState
   } catch {
-    return { draftsByConversation: {} }
+    return { account: null, draftsByConversation: {} }
   }
 }
 
