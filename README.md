@@ -1,25 +1,40 @@
 # Messenger
 
-Privacy-first messenger нового поколения.
+Privacy-first messenger built for weak and unstable networks.
 
-Главная цель проекта:
-- превзойти Telegram по удобству, цельности UX и удовольствию от использования;
-- работать стабильно даже при слабом и нестабильном интернете;
-- строиться как modern privacy-first продукт, а не как обычный облачный чат;
-- иметь чистую, премиальную и цельную архитектуру интерфейса.
+## Architecture
 
-Основной документ проекта:
+The project direction lives in:
+
 - `ARCHITECTURE.md`
-
-Правила работы ИИ в репозитории:
 - `AGENTS.md`
 
-## Принципы проекта
+Current bootstrap status:
+
+- Rust workspace rooted at `Cargo.toml`
+- initial backend crate at `backend/gateway`
+- placeholder shared core crate at `core/rust-core`
+- CI entrypoint at `.github/workflows/ci.yml`
+
+## Local Development
+
+Bootstrap the Rust toolchain and fetch dependencies:
+
+```powershell
+./scripts/bootstrap-dev.ps1
+```
+
+Run the repository checks:
+
+```powershell
+./scripts/check.ps1
+```
+
+## Principles
+
 - weak-network-first
 - privacy-first
 - premium UX
 - clean architecture
 - no generic AI-looking UI
 - no self-invented cryptography
-
-Все ключевые решения должны соответствовать `ARCHITECTURE.md`.

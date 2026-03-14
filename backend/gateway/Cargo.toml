@@ -1,0 +1,17 @@
+[package]
+name = "gateway"
+version = "0.1.0"
+edition.workspace = true
+
+[lib]
+name = "messenger_gateway"
+path = "src/lib.rs"
+
+[[bin]]
+name = "gateway"
+path = "src/main.rs"
+
+[dependencies]
+axum.workspace = true
+tokio.workspace = true
+tower.workspace = true
