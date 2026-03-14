@@ -37,6 +37,8 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 target/
+**/.gradle/
+**/build/
 
 # Dependency directories
 node_modules/
@@ -144,3 +146,7 @@ vite.config.ts.timestamp-*
 
 # Local isolated worktrees
 .worktrees/
+
+# Local task toolchains
+.tools/
+gradle-*.zip
