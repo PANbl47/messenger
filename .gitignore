@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # Local brainstorming companion artifacts
 .superpowers/
+
+# Local isolated worktrees
+.worktrees/
