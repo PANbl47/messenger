@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Serenity Desktop",
+  "version": "0.1.0",
+  "identifier": "com.serenity.desktop",
+  "build": {
+    "frontendDist": "../../web/dist",
+    "devUrl": "http://localhost:5173"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Serenity Desktop",
+        "width": 1440,
+        "height": 960
+      }
+    ]
+  },
+  "bundle": {
+    "active": false
+  }
+}

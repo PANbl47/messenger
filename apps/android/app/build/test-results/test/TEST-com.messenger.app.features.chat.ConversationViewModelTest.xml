@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.messenger.app.features.chat.ConversationViewModelTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-03-14T15:37:01.973Z" hostname="IGERMASTER" time="0.042">
+  <properties/>
+  <testcase name="full_draft_restores_after_process_restart" classname="com.messenger.app.features.chat.ConversationViewModelTest" time="0.025"/>
+  <testcase name="queued_message_stays_visible_until_retry_succeeds" classname="com.messenger.app.features.chat.ConversationViewModelTest" time="0.016"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
