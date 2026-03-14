@@ -1,0 +1,249 @@
+:root {
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: #e8eee8;
+  background:
+    radial-gradient(circle at top left, rgba(94, 128, 111, 0.28), transparent 34%),
+    linear-gradient(180deg, #0f1714 0%, #101b17 45%, #16201d 100%);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 1px solid rgba(197, 215, 203, 0.12);
+  border-radius: 999px;
+  background: rgba(197, 215, 203, 0.08);
+  color: inherit;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #98d5af;
+  outline-offset: 2px;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) 1fr;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  border-right: 1px solid rgba(197, 215, 203, 0.12);
+  background: rgba(10, 16, 13, 0.62);
+  backdrop-filter: blur(18px);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.app-main {
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.brand-block,
+.panel-header,
+.status-bar,
+.network-cluster,
+.composer-tools,
+.composer-actions,
+.toggle,
+.bubble-head,
+.bubble-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.brand-mark,
+.chat-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #30453c, #698875);
+  color: #f6fbf7;
+  font-weight: 700;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  color: #a5b6ab;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.panel {
+  border: 1px solid rgba(197, 215, 203, 0.12);
+  background: rgba(19, 28, 24, 0.82);
+  border-radius: 28px;
+  padding: 1.25rem;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.18);
+}
+
+.identity-grid,
+.chat-list,
+.timeline,
+.storage-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.identity-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.identity-grid dt,
+.storage-list small,
+.chat-row small,
+.bubble-meta {
+  color: #a5b6ab;
+}
+
+.chat-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.chat-row {
+  width: 100%;
+  border-radius: 22px;
+  justify-content: flex-start;
+  text-align: left;
+  display: flex;
+}
+
+.chat-row.active {
+  background: rgba(152, 213, 175, 0.18);
+  border-color: rgba(152, 213, 175, 0.34);
+}
+
+.secondary-nav {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.secondary-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.messenger-grid {
+  display: grid;
+  grid-template-rows: minmax(320px, 1fr) auto;
+  gap: 1rem;
+}
+
+.conversation-panel {
+  min-height: 320px;
+}
+
+.timeline {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.bubble {
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(197, 215, 203, 0.08);
+  padding: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.55rem;
+}
+
+textarea {
+  min-height: 132px;
+  resize: vertical;
+  border-radius: 24px;
+  border: 1px solid rgba(197, 215, 203, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  padding: 1rem;
+}
+
+.draft-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: 2rem;
+}
+
+.draft-chip {
+  border-radius: 999px;
+  background: rgba(152, 213, 175, 0.12);
+  border: 1px solid rgba(152, 213, 175, 0.28);
+  padding: 0.45rem 0.75rem;
+}
+
+.storage-list {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.storage-list li {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.storage-feedback {
+  margin-top: 1rem;
+  color: #cfe0d4;
+}
+
+@media (max-width: 960px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid rgba(197, 215, 203, 0.12);
+  }
+}
